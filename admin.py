@@ -20,9 +20,17 @@ st.table(clients)
 
 # Formulaire pour ajouter un client
 with st.expander("Ajouter un nouveau client"):
-    new_email = st.text_input("Email")
-    new_key = st.text_input("Clé de licence")
-    if st.button("Valider"):
-        supabase.table("clients").insert({"email": new_email, "license_key": new_key, "is_active": True}).execute()
-        st.success("Client ajouté !")
+    new_email = st.text_input("Email du client")
+    new_key = st.text_input("Clé de licence (ex: 124)")
+    # Champ optionnel pour les données spécifiques
+    new_data = st.text_area("Données JSON (optionnel)", value='{}')
+    
+    if st.button("Valider l'ajout"):
+        supabase.table("clients").insert({
+            "email": new_email, 
+            "license_key": new_key, 
+            "is_active": True,
+            "data_cloud": new_data # Assure-toi que le nom correspond à ta colonne
+        }).execute()
+        st.success("Client créé avec succès !")
         st.rerun()
